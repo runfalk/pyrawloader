@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name="rawloaderpy",
+    name="PyRawLoader",
     version="0.1.0",
-    packages=["rawloaderpy"],
+    packages=["pyrawloader"],
     zip_safe=False,
     platforms="any",
     setup_requires=["snaek"],
@@ -12,6 +12,6 @@ setup(
         "snaek",
     ],
     snaek_rust_modules=[
-        ("rawloaderpy._rawloader", "rust/"),
+        ("pyrawloader._rawloader", "rust/"),
     ]
 )

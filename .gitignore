@@ -1,7 +1,7 @@
 *.py[co]
 *.egg-info/
-rawloaderpy/_*.py
-rawloaderpy/_*.so
+pyrawloader/_*.py
+pyrawloader/_*.so
 
 .eggs/
 build/
