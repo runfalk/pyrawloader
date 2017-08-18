@@ -1,3 +1,6 @@
+extern crate rawloader;
+
+use rawloader::SRGBImage;
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 
@@ -9,18 +12,21 @@ pub struct Raw {
     pub width: usize,
     pub height: usize,
     pub data: *mut u8,
-    len: usize,
+    pub data_len: usize,
     capacity: usize,
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn raw_open(path: *const c_char) -> *mut Raw {
     // This will be used to open a file later on
-    let path = CStr::from_ptr(path);
+    let path = CStr::from_ptr(path).to_string_lossy().into_owned();
     println!("Got path {:?}", path);
 
+    let image = rawloader::decode(&path).unwrap();
+
     // Image pixel data
-    let mut data = vec![0x00, 0xff, 0xff];
+    let srgb = image.to_srgb(500, 500).unwrap();
+    let SRGBImage {mut data, width, height} = srgb;
 
     // Deconstructed image pixel data
     let ptr = data.as_mut_ptr();
@@ -31,12 +37,12 @@ pub unsafe extern "C" fn raw_open(path: *const c_char) -> *mut Raw {
     std::mem::forget(data);
 
     let s = Raw {
-        maker: CString::new("Nikon").unwrap().into_raw(),
-        model: CString::new("D7000").unwrap().into_raw(),
-        width: 1,
-        height: 1,
+        maker: CString::new(image.make).unwrap().into_raw(),
+        model: CString::new(image.model).unwrap().into_raw(),
+        width: width,
+        height: height,
         data: ptr,
-        len: len,
+        data_len: len,
         capacity: capacity,
     };
 
@@ -49,7 +55,7 @@ pub unsafe extern "C" fn raw_free(buff: *mut Raw) {
     // Retake ownership of the pointers to ensure proper de-allocation
     let _ = CString::from_raw(buff.maker);
     let _ = CString::from_raw(buff.model);
-    let _: Vec<u8> = Vec::from_raw_parts(buff.data, buff.len, buff.capacity);
+    let _: Vec<u8> = Vec::from_raw_parts(buff.data, buff.data_len, buff.capacity);
 
     println!("Freeing {:?}", buff);
 }

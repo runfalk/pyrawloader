@@ -8,3 +8,4 @@ name = "rawpillow"
 crate-type = ["cdylib"]
 
 [dependencies]
+rawloader = "*"
