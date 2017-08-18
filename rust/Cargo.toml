@@ -1,0 +1,10 @@
+[package]
+name = "rawpillow"
+version = "0.1.0"
+authors = ["Andreas Runfalk <andreas@runfalk.se>"]
+
+[lib]
+name = "rawpillow"
+crate-type = ["cdylib"]
+
+[dependencies]

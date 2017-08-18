@@ -1,0 +1,10 @@
+*.py[co]
+*.egg-info/
+rawloaderpy/_*.py
+rawloaderpy/_*.so
+
+.eggs/
+build/
+dist/
+rust/target/
+venv/
