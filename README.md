@@ -9,6 +9,7 @@ Development setup
 ```
 virtualenv --prompt="(rawloaderpy)" venv/
 source venv/bin/activate
+pip install --upgrade pip setuptools
 pip install snaek
 python setup.py build develop
 ```
